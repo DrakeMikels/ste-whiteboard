@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>STE Whiteboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/tokens.css">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="bar">
+    <div class="brand">
+      <span class="brand__mark" aria-hidden="true"></span>
+      <span class="brand__name">STE/WHITEBOARD</span>
+      <span class="brand__sub">ASD-STE100 · guideline mode</span>
+    </div>
+
+    <div class="bar__session">
+      <select id="session" aria-label="Session"></select>
+      <label class="toggle"><input type="checkbox" id="follow" checked> <span>Follow</span></label>
+      <span class="live" id="live" title="Live connection">LIVE</span>
+    </div>
+
+    <div class="meter" id="meter" title="Average STE compliance of visible cards">
+      <div class="meter__label"><span id="meter-value">STE —</span><span class="meter__status" id="meter-status"></span></div>
+      <div class="meter__track">
+        <div class="meter__band" id="meter-band"></div>
+        <div class="meter__fill" id="meter-fill"></div>
+      </div>
+    </div>
+
+    <div class="bar__actions">
+      <span class="chip" id="git-chip">git —</span>
+      <button class="btn" id="add-note" title="Add a sticky note (or double-click the board)">+ Note</button>
+      <button class="btn" id="relayout" title="Reset card positions to the turn grid">Tidy</button>
+      <a class="btn" id="export" href="/api/export" title="Download the board as STE Markdown">Export .md</a>
+      <button class="btn btn--icon" id="theme" title="Toggle light / dark" aria-label="Toggle theme">◐</button>
+      <button class="btn btn--icon" id="inspector-toggle" title="Hide inspector (i)" aria-label="Toggle inspector" aria-controls="inspector" aria-expanded="true">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><rect x="1.5" y="2" width="11" height="10" rx="1"/><path d="M9 2v10"/><path class="fill" d="M9.6 2.6h2.3v8.8H9.6z" fill="currentColor" stroke="none"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="viewport" id="viewport" tabindex="0" aria-label="Whiteboard">
+      <div class="world" id="world"></div>
+      <div class="empty" id="empty" hidden>
+        <p class="empty__title">NO SESSION FOUND</p>
+        <p>Start Claude Code in the tracked project. The board fills while Claude works.</p>
+        <code id="empty-path"></code>
+      </div>
+      <div class="zoom" id="zoom" role="group" aria-label="Zoom">
+        <button id="zoom-out" title="Zoom out (−)" aria-label="Zoom out">−</button>
+        <button id="zoom-level" title="Reset to 100%">100%</button>
+        <button id="zoom-in" title="Zoom in (+)" aria-label="Zoom in">+</button>
+        <button id="fit" title="Fit all cards in view (f)">Fit</button>
+      </div>
+    </section>
+
+    <aside class="inspector" id="inspector"></aside>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>

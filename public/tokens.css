@@ -1,0 +1,97 @@
+/* Design tokens taken from factory.com (Next.js build CSS), plus JetBrains Mono. */
+
+:root {
+  /* Factory brand */
+  --accent-100: #ef6f2e;
+  --accent-200: #ee6018;
+  --accent-300: #d15010;
+
+  --neutral-100: #d6d3d2;
+  --neutral-200: #ccc9c7;
+  --neutral-300: #b8b3b0;
+  --neutral-400: #a49d9a;
+  --neutral-500: #8a8380;
+  --neutral-600: #5c5855;
+  --neutral-700: #4d4947;
+  --neutral-800: #3d3a39;
+  --neutral-900: #2e2c2b;
+  --neutral-1000: #1f1d1c;
+
+  --dark-base-primary: #020202;
+  --dark-base-secondary: #101010;
+  --light-base-primary: #eee;
+  --light-base-secondary: #fafafa;
+
+  --surface-page-light: #f5f5f5;
+  --surface-raised-light: #fff;
+  --surface-sunken-light: #ebebeb;
+
+  /* Factory accent palette (Tailwind oklch values used on factory.com) */
+  --sky-400: oklch(74.6% .16 232.661);
+  --sky-700: oklch(50% .134 242.749);
+  --emerald-400: oklch(76.5% .177 163.223);
+  --emerald-700: oklch(50.8% .118 165.612);
+  --amber-400: oklch(82.8% .189 84.429);
+  --amber-700: oklch(55.5% .163 48.998);
+  --red-400: oklch(70.4% .191 22.216);
+  --red-700: oklch(50.5% .213 27.518);
+
+  /* Type, radius, motion */
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --text-xs: .75rem;
+  --text-sm: .875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --tracking-tight: -.025em;
+  --tracking-wide: .025em;
+  --tracking-widest: .1em;
+  --radius-sm: .1875rem;
+  --radius-md: .25rem;
+  --radius-lg: .375rem;
+  --radius-xl: .5rem;
+  --spacing: .25rem;
+  --ease: cubic-bezier(.4, 0, .2, 1);
+  --dur: .15s;
+
+  /* Semantic roles: dark (Factory default) */
+  --bg: var(--dark-base-primary);
+  --bg-2: var(--dark-base-secondary);
+  --raised: #141312;
+  --ink: var(--light-base-primary);
+  --ink-2: var(--neutral-300);
+  --muted: var(--neutral-500);
+  --rule: var(--neutral-900);
+  --rule-strong: var(--neutral-800);
+  --grid-dot: #262423;
+  --accent: var(--accent-100);
+  --accent-ink: var(--accent-100);
+  --accent-tint: rgba(239, 111, 46, .14);
+  --c-request: var(--neutral-400);
+  --c-progress: var(--sky-400);
+  --c-changes: var(--emerald-400);
+  --c-result: var(--accent-100);
+  --c-note: var(--amber-400);
+  --c-bad: var(--red-400);
+  --shadow: 0 1px 0 rgba(255, 255, 255, .03) inset, 0 8px 24px rgba(0, 0, 0, .45);
+}
+
+:root[data-theme="light"] {
+  --bg: var(--surface-page-light);
+  --bg-2: var(--surface-sunken-light);
+  --raised: var(--surface-raised-light);
+  --ink: var(--neutral-1000);
+  --ink-2: var(--neutral-700);
+  --muted: var(--neutral-600);
+  --rule: var(--neutral-200);
+  --rule-strong: var(--neutral-300);
+  --grid-dot: #d4d1cf;
+  --accent-ink: var(--accent-300);
+  --accent-tint: rgba(239, 111, 46, .12);
+  --c-request: var(--neutral-600);
+  --c-progress: var(--sky-700);
+  --c-changes: var(--emerald-700);
+  --c-result: var(--accent-300);
+  --c-note: var(--amber-700);
+  --c-bad: var(--red-700);
+  --shadow: 0 1px 2px rgba(31, 29, 28, .06), 0 8px 24px rgba(31, 29, 28, .08);
+}

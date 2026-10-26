@@ -1,0 +1,454 @@
+{
+  "version": 1,
+  "title": "STE Whiteboard",
+  "nodes": [
+    {
+      "id": "whiteboard-ui",
+      "label": "Whiteboard UI",
+      "kind": "client",
+      "order": 0,
+      "sublabel": "Vanilla JS · EventSource",
+      "path": "public/app.js",
+      "line": 581,
+      "files": {
+        "public/app.js": {
+          "summary": "Pan/zoom board client: renders turn cards and notes, live SSE updates, inspector.",
+          "at": 1792100168631
+        },
+        "public/styles.css": {
+          "summary": "Styles the top bar, board, cards, compact zoom mode, zoom control and inspector.",
+          "at": 1792100168631
+        },
+        "public/tokens.css": {
+          "summary": "Design tokens for colors, type, radius and motion, with JetBrains Mono.",
+          "at": 1791042088915
+        }
+      }
+    },
+    {
+      "id": "board-server",
+      "label": "Board Server",
+      "kind": "service",
+      "order": 1,
+      "sublabel": "Node http · :3000 · STE distiller",
+      "path": "server/index.js",
+      "line": 122,
+      "files": {
+        "server/index.js": {
+          "summary": "HTTP server on port 3000: serves UI, REST API, SSE; polls transcripts and git.",
+          "at": 1792100710765
+        },
+        "server/ste.js": {
+          "summary": "ASD-STE100 distiller that rewrites text to a 75–80% compliance target.",
+          "at": 1791044103455
+        },
+        "test/transcript.test.js": {
+          "summary": "Tests turn parsing, partial lines, and format-change warnings.",
+          "at": 1792095104312
+        },
+        "test/board.test.js": {
+          "summary": "Tests card building and saved board state using a temp folder.",
+          "at": 1792094417193
+        },
+        "test/fixtures/session.jsonl": {
+          "summary": "Hand-written Claude Code session log matching the current log format.",
+          "at": 1792094417193
+        },
+        "server/transcript.js": {
+          "summary": "Reads session logs into turns and warns when the log format looks changed.",
+          "at": 1792095104312
+        },
+        "test/real-log.test.js": {
+          "summary": "Smoke test that the newest real Claude Code log still reads as turns.",
+          "at": 1792095104312
+        }
+      },
+      "breakdown": {
+        "parts": [
+          {
+            "id": "http-router",
+            "label": "HTTP router",
+            "role": "entry",
+            "path": "server/index.js",
+            "line": 134,
+            "summary": "Routes each API request and falls back to serving the board UI files."
+          },
+          {
+            "id": "static-files",
+            "label": "Static file server",
+            "role": "ui",
+            "path": "server/index.js",
+            "line": 124,
+            "summary": "Serves the board's HTML, CSS and scripts from the public folder."
+          },
+          {
+            "id": "sse-stream",
+            "label": "Live event stream",
+            "role": "handler",
+            "path": "server/index.js",
+            "line": 70,
+            "summary": "Pushes board and git updates to every open browser over SSE."
+          },
+          {
+            "id": "transcript-poller",
+            "label": "Transcript poller",
+            "role": "integration",
+            "path": "server/index.js",
+            "line": 81,
+            "summary": "Re-reads watched session transcripts every second and sends changed boards."
+          },
+          {
+            "id": "git-poller",
+            "label": "Git poller",
+            "role": "integration",
+            "path": "server/index.js",
+            "line": 96,
+            "summary": "Snapshots the project's git state every three seconds and sends changes."
+          },
+          {
+            "id": "card-builder",
+            "label": "Card builder",
+            "role": "logic",
+            "path": "server/index.js",
+            "line": 45,
+            "summary": "Turns a session's turns into board cards, cached by transcript version."
+          },
+          {
+            "id": "state-api",
+            "label": "Board state API",
+            "role": "handler",
+            "path": "server/index.js",
+            "line": 155,
+            "summary": "Saves card positions, hidden cards and stickies, and exports Markdown."
+          },
+          {
+            "id": "ste-distiller",
+            "label": "STE distiller",
+            "role": "logic",
+            "path": "server/ste.js",
+            "line": 1,
+            "summary": "Rewrites text toward ASD-STE100 at a 75–80% compliance target."
+          }
+        ],
+        "edges": [
+          {
+            "from": "whiteboard-ui",
+            "to": "http-router",
+            "label": "REST + SSE"
+          },
+          {
+            "from": "http-router",
+            "to": "static-files"
+          },
+          {
+            "from": "http-router",
+            "to": "sse-stream",
+            "label": "/api/events"
+          },
+          {
+            "from": "http-router",
+            "to": "state-api",
+            "label": "PATCH state"
+          },
+          {
+            "from": "http-router",
+            "to": "ste-distiller",
+            "label": "/api/distill"
+          },
+          {
+            "from": "transcript-poller",
+            "to": "card-builder"
+          },
+          {
+            "from": "card-builder",
+            "to": "ste-distiller"
+          },
+          {
+            "from": "transcript-poller",
+            "to": "sse-stream",
+            "label": "board"
+          },
+          {
+            "from": "git-poller",
+            "to": "sse-stream",
+            "label": "git"
+          },
+          {
+            "from": "transcript-poller",
+            "to": "claude-transcripts",
+            "label": "tails jsonl"
+          },
+          {
+            "from": "git-poller",
+            "to": "git-repo",
+            "label": "git cli"
+          },
+          {
+            "from": "card-builder",
+            "to": "board-store",
+            "label": "cards"
+          },
+          {
+            "from": "state-api",
+            "to": "board-store",
+            "label": "positions, notes"
+          }
+        ],
+        "at": 1791058180986
+      }
+    },
+    {
+      "id": "claude-transcripts",
+      "label": "Claude Code Transcripts",
+      "kind": "external",
+      "order": 2,
+      "sublabel": "~/.claude/projects/*.jsonl",
+      "path": "server/transcript.js",
+      "line": 30,
+      "files": {
+        "server/transcript.js": {
+          "summary": "Reads Claude Code session transcripts and groups them into prompt-and-work turns.",
+          "at": 1791044332081
+        }
+      }
+    },
+    {
+      "id": "git-repo",
+      "label": "Project Git Repo",
+      "kind": "store",
+      "order": 3,
+      "sublabel": "git status / diff / log",
+      "path": "server/git.js",
+      "line": 13,
+      "files": {
+        "server/git.js": {
+          "summary": "Reads the project's git branch, uncommitted changes and recent commits.",
+          "at": 1791044315741
+        }
+      },
+      "breakdown": {
+        "parts": [
+          {
+            "id": "snapshot",
+            "label": "Snapshot entry",
+            "role": "entry",
+            "path": "server/git.js",
+            "line": 13,
+            "summary": "Runs four git queries at once and returns one snapshot, or no-repo."
+          },
+          {
+            "id": "git-runner",
+            "label": "Git command runner",
+            "role": "integration",
+            "path": "server/git.js",
+            "line": 7,
+            "summary": "Runs a git command in the project folder; returns its output, or null on failure."
+          },
+          {
+            "id": "status-parser",
+            "label": "Changed files parser",
+            "role": "logic",
+            "path": "server/git.js",
+            "line": 22,
+            "summary": "Turns git status lines into changed files with their status codes."
+          },
+          {
+            "id": "diff-totals",
+            "label": "Diff line totals",
+            "role": "logic",
+            "path": "server/git.js",
+            "line": 23,
+            "summary": "Adds up lines added and removed across the uncommitted diff."
+          },
+          {
+            "id": "commit-parser",
+            "label": "Recent commits parser",
+            "role": "logic",
+            "path": "server/git.js",
+            "line": 30,
+            "summary": "Turns the last 15 log lines into commits with hash, time and subject."
+          }
+        ],
+        "edges": [
+          {
+            "from": "board-server",
+            "to": "snapshot",
+            "label": "every 3 s"
+          },
+          {
+            "from": "snapshot",
+            "to": "git-runner",
+            "label": "4 queries"
+          },
+          {
+            "from": "snapshot",
+            "to": "status-parser"
+          },
+          {
+            "from": "snapshot",
+            "to": "diff-totals"
+          },
+          {
+            "from": "snapshot",
+            "to": "commit-parser"
+          }
+        ],
+        "at": 1791059141632
+      }
+    },
+    {
+      "id": "board-store",
+      "label": "Board Store",
+      "kind": "store",
+      "order": 4,
+      "sublabel": "data/boards/<session>.json",
+      "path": "server/board.js",
+      "line": 75,
+      "files": {
+        "server/board.js": {
+          "summary": "Builds cards from session turns; saves positions and stickies per session.",
+          "at": 1791044257098
+        }
+      },
+      "breakdown": {
+        "parts": [
+          {
+            "id": "card-builder",
+            "label": "Card builder",
+            "role": "logic",
+            "path": "server/board.js",
+            "line": 43,
+            "summary": "Turns each session turn into request, progress, changes and result cards."
+          },
+          {
+            "id": "change-statements",
+            "label": "Change statements",
+            "role": "logic",
+            "path": "server/board.js",
+            "line": 12,
+            "summary": "Describes a turn's file edits, map changes and commands as plain statements."
+          },
+          {
+            "id": "state-loader",
+            "label": "Board state loader",
+            "role": "entry",
+            "path": "server/board.js",
+            "line": 75,
+            "summary": "Reads a session's saved positions, hidden cards and notes, with safe defaults."
+          },
+          {
+            "id": "state-patcher",
+            "label": "State patch merger",
+            "role": "handler",
+            "path": "server/board.js",
+            "line": 91,
+            "summary": "Merges a browser's changes to positions, hidden cards and notes into saved state."
+          },
+          {
+            "id": "state-file",
+            "label": "Per-session state file",
+            "role": "data",
+            "path": "server/board.js",
+            "line": 83,
+            "summary": "Writes data/boards/<session>.json atomically through a temp file and rename."
+          },
+          {
+            "id": "markdown-export",
+            "label": "Markdown export",
+            "role": "logic",
+            "path": "server/board.js",
+            "line": 111,
+            "summary": "Writes the visible cards and notes as STE Markdown, grouped by turn."
+          }
+        ],
+        "edges": [
+          {
+            "from": "board-server",
+            "to": "card-builder",
+            "label": "cards"
+          },
+          {
+            "from": "board-server",
+            "to": "state-patcher",
+            "label": "positions, notes"
+          },
+          {
+            "from": "card-builder",
+            "to": "change-statements"
+          },
+          {
+            "from": "state-patcher",
+            "to": "state-loader"
+          },
+          {
+            "from": "state-patcher",
+            "to": "state-file",
+            "label": "save"
+          },
+          {
+            "from": "state-loader",
+            "to": "state-file",
+            "label": "read"
+          },
+          {
+            "from": "markdown-export",
+            "to": "state-loader"
+          }
+        ],
+        "at": 1791060773282
+      }
+    },
+    {
+      "id": "google-fonts",
+      "label": "Google Fonts",
+      "kind": "external",
+      "order": 5,
+      "sublabel": "JetBrains Mono · CDN",
+      "path": "public/index.html",
+      "line": 9,
+      "files": {
+        "public/index.html": {
+          "summary": "Whiteboard page shell; loads JetBrains Mono from Google Fonts, styles and app.js.",
+          "at": 1791044342130
+        }
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "whiteboard-ui",
+      "to": "board-server",
+      "label": "REST + SSE",
+      "style": "http"
+    },
+    {
+      "from": "whiteboard-ui",
+      "to": "google-fonts",
+      "label": "CSS + woff2",
+      "style": "http"
+    },
+    {
+      "from": "board-server",
+      "to": "claude-transcripts",
+      "label": "tails JSONL · 1s",
+      "style": "call"
+    },
+    {
+      "from": "board-server",
+      "to": "git-repo",
+      "label": "git CLI · 3s",
+      "style": "call"
+    },
+    {
+      "from": "board-server",
+      "to": "board-store",
+      "label": "positions, notes",
+      "style": "call"
+    }
+  ],
+  "focus": [
+    "board-server",
+    "whiteboard-ui"
+  ],
+  "updatedAt": 1792094645486
+}
