@@ -152,6 +152,9 @@ const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
   const sessionParam = url.searchParams.get('session') || 'latest';
   try {
+    if (url.pathname === '/api/health') {
+      return json(res, 200, { ok: true, app: 'ste-whiteboard', project: PROJECT_DIR, port: PORT, pid: process.pid });
+    }
     if (url.pathname === '/api/sessions') {
       return json(res, 200, listSessions(TRANSCRIPTS).map(({ id, title, mtime }) => ({ id, title, mtime })));
     }
@@ -194,6 +197,14 @@ const server = http.createServer(async (req, res) => {
     console.error(err);
     return json(res, 500, { error: String(err.message || err) });
   }
+});
+
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Port ${PORT} is in use. Start with PORT=<other port>, or use /whiteboard to pick a free port.`);
+    process.exit(1);
+  }
+  throw err;
 });
 
 server.listen(PORT, () => {

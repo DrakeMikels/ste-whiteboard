@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "drakemikels",
+  "description": "Claude Code plugins by Mike Drake.",
+  "owner": {
+    "name": "Mike Drake"
+  },
+  "plugins": [
+    {
+      "name": "ste-whiteboard",
+      "description": "Live whiteboard of your Claude Code session, written in ASD-STE100 Simplified Technical English. Run /whiteboard to open it.",
+      "version": "0.2.0",
+      "source": "./",
+      "category": "productivity"
+    }
+  ]
+}

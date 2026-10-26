@@ -301,9 +301,9 @@
       "label": "Board Store",
       "kind": "store",
       "order": 4,
-      "sublabel": "data/boards/<session>.json",
+      "sublabel": "$STE_DATA_DIR or data/boards",
       "path": "server/board.js",
-      "line": 75,
+      "line": 11,
       "files": {
         "server/board.js": {
           "summary": "Builds cards from session turns; saves positions and stickies per session.",
@@ -412,6 +412,24 @@
           "at": 1791044342130
         }
       }
+    },
+    {
+      "id": "whiteboard-command",
+      "label": "/whiteboard Launcher",
+      "kind": "client",
+      "order": 6,
+      "sublabel": "Claude Code plugin command · Node",
+      "path": "scripts/whiteboard.mjs",
+      "line": 84
+    },
+    {
+      "id": "server-registry",
+      "label": "Launcher Home",
+      "kind": "store",
+      "order": 7,
+      "sublabel": "~/.ste-whiteboard: servers.json, boards, logs",
+      "path": "scripts/whiteboard.mjs",
+      "line": 17
     }
   ],
   "edges": [
@@ -444,11 +462,22 @@
       "to": "board-store",
       "label": "positions, notes",
       "style": "call"
+    },
+    {
+      "from": "whiteboard-command",
+      "to": "board-server",
+      "label": "spawns · /api/health",
+      "style": "http"
+    },
+    {
+      "from": "whiteboard-command",
+      "to": "server-registry",
+      "label": "port + pid per project",
+      "style": "call"
     }
   ],
   "focus": [
-    "board-server",
-    "whiteboard-ui"
+    "whiteboard-command"
   ],
-  "updatedAt": 1792094645486
+  "updatedAt": 1793032206806
 }

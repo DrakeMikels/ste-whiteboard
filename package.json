@@ -1,6 +1,6 @@
 {
   "name": "ste-whiteboard",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Live whiteboard that distills Claude Code sessions and project changes into ASD-STE100-style technical statements.",
   "scripts": {

@@ -1,0 +1,10 @@
+{
+  "name": "ste-whiteboard",
+  "version": "0.2.0",
+  "description": "Live whiteboard of your Claude Code session: prompts, replies and file changes, written in ASD-STE100 Simplified Technical English. Run /whiteboard to open it.",
+  "author": {
+    "name": "Mike Drake"
+  },
+  "repository": "https://github.com/DrakeMikels/ste-whiteboard",
+  "keywords": ["whiteboard", "ste", "asd-ste100", "documentation", "session"]
+}

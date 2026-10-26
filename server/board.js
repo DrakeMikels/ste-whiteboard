@@ -7,7 +7,8 @@ const fs = require('fs');
 const path = require('path');
 const { distill } = require('./ste');
 
-const DATA_DIR = path.join(__dirname, '..', 'data', 'boards');
+// The plugin launcher points this outside the plugin folder, which updates replace.
+const DATA_DIR = process.env.STE_DATA_DIR || path.join(__dirname, '..', 'data', 'boards');
 
 function changeStatements(turn) {
   const out = [];

@@ -5,7 +5,32 @@ working tree. It shows each turn as cards in ASD-STE100 Simplified Technical Eng
 
 The STE rules are a guideline. The target is 75–80% compliance, not 100%.
 
-## Run
+## Install as a Claude Code plugin
+
+The plugin needs Node 20 or later. This repo is private, so the machine must have
+GitHub access first (`gh auth login`). In Claude Code, run:
+
+```
+/plugin marketplace add DrakeMikels/ste-whiteboard
+/plugin install ste-whiteboard@drakemikels
+```
+
+Restart Claude Code. Then, in any project:
+
+| Command | Result |
+| --- | --- |
+| `/whiteboard` | Starts the board for this project and gives the URL. If the board runs, gives its URL. |
+| `/whiteboard status` | Lists all running boards. |
+| `/whiteboard stop` | Stops the board for this project. |
+| `/whiteboard stop all` | Stops all boards. |
+
+Each project gets its own board on the first free port from 3000 up. Board
+positions and notes are kept in `~/.ste-whiteboard/`, so plugin updates do not
+remove them. Server logs are in the same folder.
+
+To update the plugin after a push, run `/plugin marketplace update drakemikels`.
+
+## Run without the plugin
 
 ```bash
 npm run dev
@@ -30,6 +55,8 @@ PROJECT_DIR=~/code/my-app npm run dev
 - **Project Git Repo**: the server runs `git` every 3 seconds to get changed files and commits.
 - **Board Store** (`data/boards/`): JSON files for card positions, hidden cards and notes.
 - **Google Fonts**: supplies the JetBrains Mono font.
+- **/whiteboard Launcher** (`scripts/whiteboard.mjs`): the plugin command. It starts one board server for each project and finds a free port.
+- **Launcher Home** (`~/.ste-whiteboard/`): the port and process ID of each running board, plus board data and server logs.
 
 Start with the board server and the whiteboard UI.
 
